@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Регистрация — Avensio</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container page">
+    <h1>Регистрация</h1>
+    <form id="register-form" class="card form">
+      <label>Email <input type="email" name="email" required /></label>
+      <label>Пароль <input type="password" name="password" required minlength="6" /></label>
+      <button class="btn" type="submit">Зарегистрироваться</button>
+      <p id="register-status"></p>
+    </form>
+    <p><a href="./catalog.html">Перейти в каталог</a></p>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
