@@ -1,0 +1,9 @@
+openapi: 3.0.3
+info:
+  title: Avensio Marketplace API
+  version: v1
+paths:
+  /api/auth/login: { post: { summary: Login } }
+  /api/products: { get: { summary: Product list } }
+  /api/payments/create: { post: { summary: Create YooKassa payment } }
+  /api/delivery/calculate: { post: { summary: Calculate CDEK shipping } }
