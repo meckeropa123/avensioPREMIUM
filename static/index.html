@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avensio Marketplace MVP</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>Avensio Marketplace</h1>
+      <nav>
+        <a href="#catalog">Каталог</a>
+        <a href="#roles">Роли</a>
+        <a href="#integrations">Интеграции</a>
+        <a href="#cart">Корзина <span id="cartCount">0</span></a>
+                <button class="nav-btn" id="openLogin">Войти</button>
+        <button class="nav-btn primary" id="openRegister">Регистрация</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Запускаемый MVP маркетплейса</h2>
+      <p>Статическая версия для быстрого старта + backend scaffolding в <code>apps/web</code>.</p>
+      <a class="btn" href="#catalog">Смотреть товары</a>
+      <button class="btn ghost" data-auth-required>Добавить товар (требует вход)</button>
+    </section>
+
+    <section id="catalog">
+      <h3>Популярные товары</h3>
+      <div class="grid">
+        <article class="card">
+          <h4>MVP Smartphone</h4>
+          <p>8/128 GB, NFC, 5G</p>
+          <div class="price">49 990 ₽</div>
+          <button class="btn add-cart" data-id="mvp-smartphone" data-title="MVP Smartphone" data-price="49990">В корзину</button>
+        </article>
+        <article class="card">
+          <h4>Wireless Earbuds</h4>
+          <p>ANC, Bluetooth 5.3</p>
+          <div class="price">7 490 ₽</div>
+          <button class="btn add-cart" data-id="wireless-earbuds" data-title="Wireless Earbuds" data-price="7490">В корзину</button>
+        </article>
+        <article class="card">
+          <h4>Smart Watch</h4>
+          <p>AMOLED, GPS, eSIM</p>
+          <div class="price">18 900 ₽</div>
+          <button class="btn add-cart" data-id="smart-watch" data-title="Smart Watch" data-price="18900">В корзину</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="roles">
+      <h3>Роли платформы</h3>
+      <ul>
+        <li><b>Покупатель:</b> каталог, корзина, заказы, отзывы.</li>
+        <li><b>Продавец:</b> товары, остатки, заказы, аналитика.</li>
+        <li><b>Администратор:</b> модерация, пользователи, категории.</li>
+      </ul>
+    </section>
+
+
+    <section id="cart">
+      <h3>Корзина</h3>
+      <div id="cartEmpty" class="muted">Корзина пуста</div>
+      <div id="cartItems" class="cart-list"></div>
+      <div class="cart-summary">
+        <strong>Итого: <span id="cartTotal">0 ₽</span></strong>
+      </div>
+    </section>
+
+    <section id="integrations">
+      <h3>Интеграции (MVP contracts)</h3>
+      <p>YooKassa, Яндекс Карты, СДЭК подготовлены через API-эндпоинты в проекте.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© 2026 Avensio Marketplace MVP</div>
+    <div class="auth-hint" id="authHint" hidden>🔒 Для изменения данных войдите или зарегистрируйтесь.</div>
+  </footer>
+  <div class="modal" id="authModal" hidden>
+    <div class="modal-card">
+      <button class="close" id="closeAuth">×</button>
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Вход</button>
+        <button class="tab" data-tab="register">Регистрация</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <h3>Вход в аккаунт</h3>
+        <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
+        <label>Телефон<input type="tel" name="phone" required placeholder="+7 (900) 000-00-00" /></label>
+        <label>Логин<input type="text" name="username" required placeholder="your_login" /></label>
+        <label>Пароль<input type="password" name="password" required placeholder="••••••••" /></label>
+        <button class="btn" type="submit">Войти</button>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <h3>Создание аккаунта</h3>
+        <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
+        <label>Телефон<input type="tel" name="phone" required placeholder="+7 (900) 000-00-00" /></label>
+        <label>Логин<input type="text" name="username" required placeholder="new_login" /></label>
+        <label>Пароль<input type="password" name="password" required minlength="8" placeholder="не менее 8 символов" /></label>
+        <button class="btn" type="submit">Зарегистрироваться</button>
+      </form>
+      <p class="muted">MVP: формы демонстрационные, интеграция с API подключается следующим шагом.</p>
+    </div>
+  </div>
+
+  <script>
+    const needsAuth = document.querySelectorAll("[data-auth-required]");
+    const hint = document.getElementById("authHint");
+    needsAuth.forEach((el) => {
+      el.addEventListener("click", () => {
+        alert("Чтобы изменить данные, войдите или зарегистрируйтесь. Просмотр доступен без аккаунта.");
+        if (hint) hint.hidden = false;
+      });
+    });
+
+    const modal = document.getElementById("authModal");
+    const openLogin = document.getElementById("openLogin");
+    const openRegister = document.getElementById("openRegister");
+    const closeAuth = document.getElementById("closeAuth");
+    const tabs = document.querySelectorAll(".tab");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+
+    function openModal(tab) {
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+      tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === tab));
+      loginForm.classList.toggle("hidden", tab !== "login");
+      registerForm.classList.toggle("hidden", tab !== "register");
+    }
+
+    openLogin?.addEventListener("click", () => openModal("login"));
+    openRegister?.addEventListener("click", () => openModal("register"));
+    closeAuth?.addEventListener("click", () => { modal.hidden = true; document.body.style.overflow = "auto"; });
+    tabs.forEach((t) => t.addEventListener("click", () => openModal(t.dataset.tab)));
+
+    [loginForm, registerForm].forEach((form) => {
+      form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Форма отправлена. В следующем шаге подключим API авторизации.");
+      });
+    });
+
+
+    const CART_KEY = "avensio_cart";
+    const cartItemsNode = document.getElementById("cartItems");
+    const cartEmptyNode = document.getElementById("cartEmpty");
+    const cartTotalNode = document.getElementById("cartTotal");
+    const cartCountNode = document.getElementById("cartCount");
+
+    function formatPrice(v){ return new Intl.NumberFormat("ru-RU").format(v) + " ₽"; }
+    function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); } catch { return []; } }
+    function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+
+    function renderCart(){
+      const cart = getCart();
+      cartItemsNode.innerHTML = "";
+      if(cart.length===0){
+        cartEmptyNode.hidden = false;
+      } else {
+        cartEmptyNode.hidden = true;
+        cart.forEach((item)=>{
+          const row = document.createElement("div");
+          row.className = "cart-row";
+          row.innerHTML = `
+            <div>
+              <div><b>${item.title}</b></div>
+              <div class="muted">${formatPrice(item.price)} × ${item.qty}</div>
+            </div>
+            <div class="cart-actions">
+              <button class="small-btn" data-dec="${item.id}">-</button>
+              <button class="small-btn" data-inc="${item.id}">+</button>
+              <button class="small-btn danger" data-del="${item.id}">Удалить</button>
+            </div>`;
+          cartItemsNode.appendChild(row);
+        });
+      }
+      const total = cart.reduce((s,i)=>s + i.price*i.qty, 0);
+      const count = cart.reduce((s,i)=>s + i.qty, 0);
+      cartTotalNode.textContent = formatPrice(total);
+      cartCountNode.textContent = count;
+    }
+
+    function addToCart(item){
+      const cart = getCart();
+      const exist = cart.find((x)=>x.id===item.id);
+      if(exist) exist.qty += 1; else cart.push({...item, qty:1});
+      saveCart(cart);
+      renderCart();
+    }
+
+    document.querySelectorAll(".add-cart").forEach((btn)=>{
+      btn.addEventListener("click", ()=>{
+        addToCart({
+          id: btn.dataset.id,
+          title: btn.dataset.title,
+          price: Number(btn.dataset.price)
+        });
+      });
+    });
+
+    cartItemsNode.addEventListener("click", (e)=>{
+      const t = e.target;
+      if(!(t instanceof HTMLElement)) return;
+      const cart = getCart();
+      if(t.dataset.inc){
+        const item = cart.find(i=>i.id===t.dataset.inc); if(item) item.qty += 1;
+      }
+      if(t.dataset.dec){
+        const item = cart.find(i=>i.id===t.dataset.dec); if(item) item.qty -= 1;
+      }
+      let filtered = cart.filter(i=>i.qty>0);
+      if(t.dataset.del){ filtered = filtered.filter(i=>i.id!==t.dataset.del); }
+      saveCart(filtered);
+      renderCart();
+    });
+
+    renderCart();
+
+  </script>
+</body>
+</html>
