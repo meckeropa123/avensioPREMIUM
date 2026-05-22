@@ -14,8 +14,6 @@
         <a href="#catalog">Каталог</a>
         <a href="#roles">Роли</a>
         <a href="#integrations">Интеграции</a>
-                <button class="nav-btn" id="openLogin">Войти</button>
-        <button class="nav-btn primary" id="openRegister">Регистрация</button>
       </nav>
     </div>
   </header>
@@ -25,7 +23,6 @@
       <h2>Запускаемый MVP маркетплейса</h2>
       <p>Статическая версия для быстрого старта + backend scaffolding в <code>apps/web</code>.</p>
       <a class="btn" href="#catalog">Смотреть товары</a>
-      <button class="btn ghost" data-auth-required>Добавить товар (требует вход)</button>
     </section>
 
     <section id="catalog">
@@ -66,75 +63,6 @@
 
   <footer>
     <div class="container">© 2026 Avensio Marketplace MVP</div>
-    <div class="auth-hint" id="authHint" hidden>🔒 Для изменения данных войдите или зарегистрируйтесь.</div>
   </footer>
-  <div class="modal" id="authModal" hidden>
-    <div class="modal-card">
-      <button class="close" id="closeAuth">×</button>
-      <div class="tabs">
-        <button class="tab active" data-tab="login">Вход</button>
-        <button class="tab" data-tab="register">Регистрация</button>
-      </div>
-
-      <form id="loginForm" class="auth-form">
-        <h3>Вход в аккаунт</h3>
-        <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
-        <label>Телефон<input type="tel" name="phone" required placeholder="+7 (900) 000-00-00" /></label>
-        <label>Логин<input type="text" name="username" required placeholder="your_login" /></label>
-        <label>Пароль<input type="password" name="password" required placeholder="••••••••" /></label>
-        <button class="btn" type="submit">Войти</button>
-      </form>
-
-      <form id="registerForm" class="auth-form hidden">
-        <h3>Создание аккаунта</h3>
-        <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
-        <label>Телефон<input type="tel" name="phone" required placeholder="+7 (900) 000-00-00" /></label>
-        <label>Логин<input type="text" name="username" required placeholder="new_login" /></label>
-        <label>Пароль<input type="password" name="password" required minlength="8" placeholder="не менее 8 символов" /></label>
-        <button class="btn" type="submit">Зарегистрироваться</button>
-      </form>
-      <p class="muted">MVP: формы демонстрационные, интеграция с API подключается следующим шагом.</p>
-    </div>
-  </div>
-
-  <script>
-    const needsAuth = document.querySelectorAll("[data-auth-required]");
-    const hint = document.getElementById("authHint");
-    needsAuth.forEach((el) => {
-      el.addEventListener("click", () => {
-        alert("Чтобы изменить данные, войдите или зарегистрируйтесь. Просмотр доступен без аккаунта.");
-        if (hint) hint.hidden = false;
-      });
-    });
-
-    const modal = document.getElementById("authModal");
-    const openLogin = document.getElementById("openLogin");
-    const openRegister = document.getElementById("openRegister");
-    const closeAuth = document.getElementById("closeAuth");
-    const tabs = document.querySelectorAll(".tab");
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-
-    function openModal(tab) {
-      modal.hidden = false;
-      document.body.style.overflow = "hidden";
-      tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === tab));
-      loginForm.classList.toggle("hidden", tab !== "login");
-      registerForm.classList.toggle("hidden", tab !== "register");
-    }
-
-    openLogin?.addEventListener("click", () => openModal("login"));
-    openRegister?.addEventListener("click", () => openModal("register"));
-    closeAuth?.addEventListener("click", () => { modal.hidden = true; document.body.style.overflow = "auto"; });
-    tabs.forEach((t) => t.addEventListener("click", () => openModal(t.dataset.tab)));
-
-    [loginForm, registerForm].forEach((form) => {
-      form?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        alert("Форма отправлена. В следующем шаге подключим API авторизации.");
-      });
-    });
-
-  </script>
 </body>
 </html>
