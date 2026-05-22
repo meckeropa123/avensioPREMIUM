@@ -23,7 +23,6 @@
       <h2>Запускаемый MVP маркетплейса</h2>
       <p>Статическая версия для быстрого старта + backend scaffolding в <code>apps/web</code>.</p>
       <a class="btn" href="#catalog">Смотреть товары</a>
-      <button class="btn ghost" data-auth-required>Добавить товар (требует вход)</button>
     </section>
 
     <section id="catalog">
@@ -64,17 +63,6 @@
 
   <footer>
     <div class="container">© 2026 Avensio Marketplace MVP</div>
-    <div class="auth-hint" id="authHint" hidden>🔒 Для изменения данных войдите или зарегистрируйтесь.</div>
   </footer>
-  <script>
-    const needsAuth = document.querySelectorAll("[data-auth-required]");
-    const hint = document.getElementById("authHint");
-    needsAuth.forEach((el) => {
-      el.addEventListener("click", () => {
-        alert("Чтобы изменить данные, войдите или зарегистрируйтесь. Просмотр доступен без аккаунта.");
-        if (hint) hint.hidden = false;
-      });
-    });
-  </script>
 </body>
 </html>
